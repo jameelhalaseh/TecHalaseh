@@ -94,7 +94,7 @@ export const TECH_SKILLS = {
 
 export const CREDENTIALS = [
   { id: "degree", abbr: "BSc", color: "#0A84FF" },
-  { id: "sc900", abbr: "SC", color: "#00D4AA" },
+  { id: "ceh", abbr: "CEH", color: "#00D4AA" },
   { id: "ai900", abbr: "AI", color: "#8B5CF6" },
   { id: "sc200", abbr: "SC", color: "#F59E0B" },
 ] as const;

@@ -102,13 +102,13 @@ const LINKS = [
   {
     key: "email",
     label: "Email",
-    href: "mailto:contact@techalaseh.com",
+    href: "mailto:jameelhalaseh2003@gmail.com",
     icon: MailIcon,
   },
   {
     key: "linkedin",
     label: "LinkedIn",
-    href: "#",
+    href: "https://linkedin.com/in/jameel-halaseh",
     icon: LinkedInIcon,
   },
   {

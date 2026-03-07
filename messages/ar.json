@@ -75,8 +75,8 @@
   "credentials": {
     "title": "الشهادات والاعتمادات",
     "items": {
-      "degree": { "name": "بكالوريوس أمن المعلومات", "issuer": "الجامعة", "status": "مكتمل" },
-      "sc900": { "name": "SC-900", "issuer": "مايكروسوفت", "status": "معتمد" },
+      "degree": { "name": "بكالوريوس أمن المعلومات", "issuer": "جامعة البترا", "status": "مكتمل" },
+      "ceh": { "name": "تدريب CEH (40 ساعة)", "issuer": "EC-Council", "status": "مكتمل" },
       "ai900": { "name": "AI-900", "issuer": "مايكروسوفت", "status": "قيد التحضير" },
       "sc200": { "name": "SC-200", "issuer": "مايكروسوفت", "status": "قيد التحضير" }
     }
