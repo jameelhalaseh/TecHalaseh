@@ -64,6 +64,7 @@
   "techArsenal": {
     "title": "Tech Arsenal",
     "subtitle": "Interactive Skill Map",
+    "all": "All",
     "categories": {
       "frontend": "Frontend",
       "backend": "Backend",

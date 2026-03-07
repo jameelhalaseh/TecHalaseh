@@ -2,39 +2,7 @@
 
 import { useState, useCallback, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
-
-/* -------------------------------------------------------------------------- */
-/*  Contact / Grand Finale                                                     */
-/*  Section 9 – Contact form, social links, and site footer.                  */
-/* -------------------------------------------------------------------------- */
-
-/* ---- Framer Motion variants ---- */
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const staggerContainer: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const staggerChild: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+import { motion, AnimatePresence } from "framer-motion";
 
 /* -------------------------------------------------------------------------- */
 /*  Inline SVG Icons                                                           */
@@ -190,62 +158,37 @@ export default function Contact() {
     <section id="contact" className="relative min-h-screen py-32">
       <div className="mx-auto max-w-2xl px-6">
         {/* ---- Headline ---- */}
-        <motion.h2
-          className="text-4xl font-bold text-text-primary md:text-6xl"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-        >
+        <h2 className="text-4xl font-bold text-text-primary md:text-6xl">
           {t("title")}
-        </motion.h2>
+        </h2>
 
-        <motion.p
-          className="mt-4 text-xl text-text-secondary"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-        >
+        <p className="mt-4 text-xl text-text-secondary">
           {t("subtitle")}
-        </motion.p>
+        </p>
 
         {/* ---- Social links ---- */}
-        <motion.div
-          className="mt-12 flex flex-wrap justify-center gap-6"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
+        <div className="mt-12 flex flex-wrap justify-center gap-6">
           {LINKS.map(({ key, label, href, icon: Icon }) => (
-            <motion.a
+            <a
               key={key}
               href={href}
               target={key !== "email" ? "_blank" : undefined}
               rel={key !== "email" ? "noopener noreferrer" : undefined}
               className="flex items-center gap-2 text-text-secondary transition-colors hover:text-accent-blue"
-              variants={staggerChild}
-              whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
             >
               <Icon />
               <span>{label}</span>
-            </motion.a>
+            </a>
           ))}
-        </motion.div>
+        </div>
 
         {/* ---- Contact Form ---- */}
-        <motion.form
+        <form
           onSubmit={handleSubmit}
           className="mt-16 flex flex-col gap-8"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
         >
           {/* Name field */}
-          <motion.div variants={staggerChild} className="relative">
+          <div className="relative">
             <input
               type="text"
               value={formState.name}
@@ -269,10 +212,10 @@ export default function Contact() {
               animate={{ scaleX: focusedField === "name" ? 1 : 0 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
-          </motion.div>
+          </div>
 
           {/* Email field */}
-          <motion.div variants={staggerChild} className="relative">
+          <div className="relative">
             <input
               type="email"
               value={formState.email}
@@ -295,10 +238,10 @@ export default function Contact() {
               animate={{ scaleX: focusedField === "email" ? 1 : 0 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
-          </motion.div>
+          </div>
 
           {/* Message field */}
-          <motion.div variants={staggerChild} className="relative">
+          <div className="relative">
             <textarea
               value={formState.message}
               onChange={handleChange("message")}
@@ -321,10 +264,10 @@ export default function Contact() {
               animate={{ scaleX: focusedField === "message" ? 1 : 0 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
-          </motion.div>
+          </div>
 
           {/* Submit button */}
-          <motion.div variants={staggerChild} className="flex flex-col items-center">
+          <div className="flex flex-col items-center">
             <motion.button
               type="submit"
               className="rounded-full bg-gradient-to-r from-accent-blue to-accent-purple px-8 py-3 font-semibold text-white shadow-lg transition-shadow hover:shadow-accent-blue/20"
@@ -336,8 +279,8 @@ export default function Contact() {
             </motion.button>
 
             <SuccessToast visible={sent} />
-          </motion.div>
-        </motion.form>
+          </div>
+        </form>
 
         {/* ---- Footer ---- */}
         <footer className="mt-24 border-t border-white/5 pt-8 text-center">

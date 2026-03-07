@@ -13,55 +13,6 @@ import { PROJECTS } from "@/lib/constants";
 type MockupType = (typeof PROJECTS)[number]["mockupType"];
 
 /* -------------------------------------------------------------------------- */
-/*  Animation helpers                                                          */
-/* -------------------------------------------------------------------------- */
-
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
-
-const sectionVariants = {
-  hidden: { opacity: 0, y: 48 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease },
-  },
-};
-
-const slideFromLeft = {
-  hidden: { opacity: 0, x: -60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease },
-  },
-};
-
-const slideFromRight = {
-  hidden: { opacity: 0, x: 60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, ease },
-  },
-};
-
-const staggerContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.15 },
-  },
-};
-
-const fadeUpChild = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease },
-  },
-};
-
-/* -------------------------------------------------------------------------- */
 /*  Phone Mockup  (GAIBE)                                                      */
 /* -------------------------------------------------------------------------- */
 
@@ -531,13 +482,7 @@ function FreelanceCards({ accent }: { accent: string }) {
   ];
 
   return (
-    <motion.div
-      variants={sectionVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      className="py-20"
-    >
+    <div className="py-20">
       <div className="max-w-6xl mx-auto px-6">
         {/* Title */}
         <div className="mb-10">
@@ -556,11 +501,7 @@ function FreelanceCards({ accent }: { accent: string }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {cards.map((card, i) => (
             <TiltCard key={card.name}>
-              <motion.div
-                variants={fadeUpChild}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+              <div
                 className={cn(
                   "group relative overflow-hidden rounded-xl p-6 h-52",
                   "bg-white/5 backdrop-blur border border-white/10",
@@ -596,12 +537,12 @@ function FreelanceCards({ accent }: { accent: string }) {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </TiltCard>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -655,18 +596,12 @@ export default function Projects() {
       <ProjectDots total={PROJECTS.length} activeIndex={activeProject} />
 
       {/* Section title */}
-      <motion.div
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        className="max-w-6xl mx-auto px-6 mb-16"
-      >
+      <div className="max-w-6xl mx-auto px-6 mb-16">
         <h2 className="text-5xl md:text-6xl font-bold text-text-primary">
           {t("title")}
         </h2>
         <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple" />
-      </motion.div>
+      </div>
 
       {/* Featured projects */}
       {featured.map((project, index) => {
@@ -676,7 +611,7 @@ export default function Projects() {
           <motion.div
             key={project.id}
             onViewportEnter={() => setActiveProject(index)}
-            viewport={{ amount: 0.4 }}
+            viewport={{ amount: 0.15 }}
             className="py-20"
           >
             <div className="max-w-6xl mx-auto px-6">
@@ -687,40 +622,24 @@ export default function Projects() {
                 )}
               >
                 {/* Text side */}
-                <motion.div
-                  variants={staggerContainer}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-80px" }}
-                  className={cn(isEven && "lg:[direction:ltr]")}
-                >
-                  <motion.h3
-                    variants={fadeUpChild}
+                <div className={cn(isEven && "lg:[direction:ltr]")}>
+                  <h3
                     className="text-4xl font-bold mb-2"
                     style={{ color: project.accent }}
                   >
                     {t(`${project.id}.title`)}
-                  </motion.h3>
+                  </h3>
 
-                  <motion.p
-                    variants={fadeUpChild}
-                    className="text-xl text-text-secondary mb-4"
-                  >
+                  <p className="text-xl text-text-secondary mb-4">
                     {t(`${project.id}.subtitle`)}
-                  </motion.p>
+                  </p>
 
-                  <motion.p
-                    variants={fadeUpChild}
-                    className="text-text-secondary leading-relaxed mb-6"
-                  >
+                  <p className="text-text-secondary leading-relaxed mb-6">
                     {t(`${project.id}.description`)}
-                  </motion.p>
+                  </p>
 
                   {/* Tech tags */}
-                  <motion.div
-                    variants={fadeUpChild}
-                    className="flex flex-wrap gap-2 mb-6"
-                  >
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {project.tech.map((tech) => (
                       <span
                         key={tech}
@@ -730,13 +649,10 @@ export default function Projects() {
                         {tech}
                       </span>
                     ))}
-                  </motion.div>
+                  </div>
 
                   {/* Key stat */}
-                  <motion.div
-                    variants={fadeUpChild}
-                    className="flex items-center gap-3"
-                  >
+                  <div className="flex items-center gap-3">
                     <div
                       className="w-1 h-10 rounded-full"
                       style={{
@@ -746,22 +662,16 @@ export default function Projects() {
                     <p className="text-sm text-text-secondary italic">
                       {t(`${project.id}.stat`)}
                     </p>
-                  </motion.div>
-                </motion.div>
+                  </div>
+                </div>
 
                 {/* Visual / mockup side */}
-                <motion.div
-                  variants={isEven ? slideFromLeft : slideFromRight}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-80px" }}
-                  className={cn(isEven && "lg:[direction:ltr]")}
-                >
+                <div className={cn(isEven && "lg:[direction:ltr]")}>
                   <ProjectMockup
                     type={project.mockupType}
                     accent={project.accent}
                   />
-                </motion.div>
+                </div>
               </div>
             </div>
 
@@ -779,7 +689,7 @@ export default function Projects() {
       {freelance && (
         <motion.div
           onViewportEnter={() => setActiveProject(PROJECTS.length - 1)}
-          viewport={{ amount: 0.4 }}
+          viewport={{ amount: 0.15 }}
         >
           {/* Divider */}
           <div className="max-w-6xl mx-auto px-6">

@@ -64,6 +64,7 @@
   "techArsenal": {
     "title": "ترسانة التقنية",
     "subtitle": "خريطة مهارات تفاعلية",
+    "all": "الكل",
     "categories": {
       "frontend": "الواجهة الأمامية",
       "backend": "الخادم",

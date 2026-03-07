@@ -64,3 +64,24 @@ body {
     linear-gradient(90deg, rgba(245, 245, 247, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
+
+/* ------------------------------------------------------------------ */
+/*  Reduced-motion / animation fallback                                */
+/*  When the user prefers reduced motion, or when Framer Motion's      */
+/*  whileInView never fires (e.g. full-page screenshot, SSR), ensure   */
+/*  all content is visible instead of stuck at opacity: 0.             */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Force Framer Motion hidden elements to be visible */
+  [style*="opacity: 0"],
+  [style*="opacity:0"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

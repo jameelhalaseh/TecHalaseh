@@ -7,28 +7,6 @@ import { cn } from "@/lib/cn";
 import { CREDENTIALS } from "@/lib/constants";
 
 /* -------------------------------------------------------------------------- */
-/*  Animation variants                                                         */
-/* -------------------------------------------------------------------------- */
-
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, x: 60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.6, ease },
-  },
-};
-
-/* -------------------------------------------------------------------------- */
 /*  TiltCard wrapper                                                           */
 /* -------------------------------------------------------------------------- */
 
@@ -85,7 +63,9 @@ function TiltCard({
 /* -------------------------------------------------------------------------- */
 
 function StatusBadge({ status }: { status: string }) {
-  if (status === "completed" || status === "certified") {
+  const normalizedStatus = status.toLowerCase();
+
+  if (normalizedStatus === "completed" || normalizedStatus === "certified") {
     return (
       <div className="flex items-center gap-1.5">
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20">
@@ -114,7 +94,7 @@ function StatusBadge({ status }: { status: string }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
       </span>
-      <span className="text-sm font-medium text-amber-400">In Progress</span>
+      <span className="text-sm font-medium text-amber-400">{status}</span>
     </div>
   );
 }
@@ -130,25 +110,15 @@ export default function Credentials() {
     <section id="credentials" className="relative px-6 py-32 md:px-12 lg:px-20">
       <div className="mx-auto max-w-6xl">
         {/* Section title */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <h2 className="text-5xl md:text-6xl font-bold text-text-primary">
             {t("title")}
           </h2>
           <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-accent-cyan to-accent-purple" />
-        </motion.div>
+        </div>
 
         {/* Cards container */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+        <div
           className={cn(
             "flex gap-6",
             /* Desktop: horizontal scroll row */
@@ -158,12 +128,12 @@ export default function Credentials() {
           )}
         >
           {CREDENTIALS.map((cred) => {
-            const name = t(`${cred.id}.name`);
-            const issuer = t(`${cred.id}.issuer`);
-            const status = t(`${cred.id}.status`);
+            const name = t(`items.${cred.id}.name`);
+            const issuer = t(`items.${cred.id}.issuer`);
+            const status = t(`items.${cred.id}.status`);
 
             return (
-              <motion.div key={cred.id} variants={cardVariants}>
+              <div key={cred.id}>
                 <TiltCard className="h-full">
                   <div
                     className={cn(
@@ -191,7 +161,7 @@ export default function Credentials() {
                     <p className="mb-4 text-sm text-text-secondary">{issuer}</p>
 
                     {/* Status */}
-                    <StatusBadge status={status.toLowerCase()} />
+                    <StatusBadge status={status} />
 
                     {/* Subtle gradient overlay on hover */}
                     <div
@@ -203,10 +173,10 @@ export default function Credentials() {
                     />
                   </div>
                 </TiltCard>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

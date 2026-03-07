@@ -18,41 +18,6 @@ const HeroScene = dynamic(
   { ssr: false },
 );
 
-/* ---- Framer Motion variants ---- */
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.2, delayChildren: 0.3 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-const taglineVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const, delay: 1.5 },
-  },
-};
-
-const subtitleVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: 1.9 },
-  },
-};
-
 /* ---- Chevron SVG for scroll indicator ---- */
 function ScrollChevron() {
   return (
@@ -152,36 +117,22 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
         style={{ opacity: overlayOpacity }}
       >
-        <motion.div
-          className="pointer-events-auto flex flex-col items-center gap-4 px-4 text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div className="pointer-events-auto flex flex-col items-center gap-4 px-4 text-center">
           {/* Name / title */}
-          <motion.h1
-            variants={itemVariants}
-            className="text-7xl font-bold leading-none tracking-tight text-text-primary md:text-8xl lg:text-9xl"
-          >
+          <h1 className="text-7xl font-bold leading-none tracking-tight text-text-primary md:text-8xl lg:text-9xl">
             {t("name")}
-          </motion.h1>
+          </h1>
 
           {/* Tagline */}
-          <motion.p
-            variants={taglineVariants}
-            className="max-w-lg text-2xl text-text-secondary"
-          >
+          <p className="max-w-lg text-2xl text-text-secondary">
             {t("tagline")}
-          </motion.p>
+          </p>
 
           {/* Subtitle / roles */}
-          <motion.p
-            variants={subtitleVariants}
-            className="text-sm tracking-wide text-text-muted"
-          >
+          <p className="text-sm tracking-wide text-text-secondary">
             {t("subtitle")}
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       </div>
 
       {/* ---- Scroll indicator ---- */}

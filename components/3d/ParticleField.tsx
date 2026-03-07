@@ -11,8 +11,8 @@ import * as THREE from "three";
 /*  of three accent colors. Uses a single InstancedMesh for performance.      */
 /* -------------------------------------------------------------------------- */
 
-const PARTICLE_COUNT = 150;
-const SPHERE_RADIUS = 8;
+const PARTICLE_COUNT = 120;
+const SPHERE_RADIUS = 6;
 
 /* accent palette */
 const COLORS = [
@@ -65,7 +65,7 @@ export default function ParticleField() {
         Math.random() * Math.PI * 2,
         Math.random() * Math.PI * 2,
       ),
-      scale: 0.03 + Math.random() * 0.05,
+      scale: 0.015 + Math.random() * 0.03,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
     }));
   }, []);

@@ -38,13 +38,7 @@ const CLUSTER_CENTERS: Record<CategoryKey, { x: number; y: number }> = {
   devops: { x: 820, y: 720 },
 };
 
-const CATEGORY_LABELS: Record<CategoryKey, string> = {
-  frontend: "Frontend",
-  backend: "Backend",
-  security: "Security",
-  aiml: "AI / ML",
-  devops: "DevOps",
-};
+/* Category labels are pulled from translations via t("categories.<key>") */
 
 /* -------------------------------------------------------------------------- */
 /*  Deterministic positioning                                                  */
@@ -205,27 +199,15 @@ export default function TechArsenal() {
 
       <div className="mx-auto max-w-6xl">
         {/* Section title */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <h2 className="text-5xl md:text-6xl font-bold text-text-primary">
             {t("title")}
           </h2>
           <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple" />
-        </motion.div>
+        </div>
 
         {/* Category filter buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap gap-2 mb-8"
-        >
+        <div className="flex flex-wrap gap-2 mb-8">
           <button
             onClick={() => setActiveCategory("all")}
             className={cn(
@@ -255,19 +237,13 @@ export default function TechArsenal() {
                   : undefined
               }
             >
-              {CATEGORY_LABELS[cat]}
+              {t(`categories.${cat}`)}
             </button>
           ))}
-        </motion.div>
+        </div>
 
         {/* Constellation SVG */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative aspect-[16/9] min-h-[500px] rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden"
-        >
+        <div className="relative aspect-[16/9] min-h-[500px] rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden">
           <svg
             ref={handleSvgRef}
             viewBox="0 0 1000 1000"
@@ -304,7 +280,7 @@ export default function TechArsenal() {
                   opacity={isActive(cat) ? 0.35 : 0.08}
                   className="transition-opacity duration-500 pointer-events-none select-none"
                 >
-                  {CATEGORY_LABELS[cat]}
+                  {t(`categories.${cat}`)}
                 </text>
               );
             })}
@@ -313,20 +289,12 @@ export default function TechArsenal() {
             {nodes.map((node, i) => {
               const active = isActive(node.category);
               return (
-                <motion.circle
+                <circle
                   key={node.id}
                   cx={node.cx}
                   cy={node.cy}
                   r={node.r}
                   fill={node.color}
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: active ? 0.85 : 0.15 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.03,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
                   className="cursor-pointer transition-opacity duration-500"
                   style={{
                     transformOrigin: `${node.cx}px ${node.cy}px`,
@@ -334,9 +302,8 @@ export default function TechArsenal() {
                     animationDelay: `${(i * 0.2) % 2}s`,
                     opacity: active ? 0.85 : 0.15,
                   }}
-                  onMouseEnter={(e) => handleNodeEnter(node, e)}
+                  onMouseEnter={(e) => handleNodeEnter(node, e as unknown as MouseEvent<SVGCircleElement>)}
                   onMouseLeave={handleNodeLeave}
-                  whileHover={{ scale: 1.6 }}
                 />
               );
             })}
@@ -344,7 +311,7 @@ export default function TechArsenal() {
 
           {/* Tooltip overlay */}
           {hoveredNode && <Tooltip node={hoveredNode} svgRect={svgRect} />}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

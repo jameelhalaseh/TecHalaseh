@@ -199,87 +199,55 @@ export default function Identity() {
   return (
     <section
       id="about"
-      className="relative min-h-screen px-6 py-32 md:px-12 lg:px-20"
+      className="relative px-6 py-24 md:px-12 lg:px-20"
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 md:grid-cols-2">
         {/* ---- Left column: Avatar ---- */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="flex items-center justify-center"
-        >
+        <div className="flex items-center justify-center">
           <GradientBorderAvatar />
-        </motion.div>
+        </div>
 
         {/* ---- Right column: Details ---- */}
         <div className="flex flex-col gap-10">
           {/* Counter */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
+          <div>
             <span className="block text-6xl font-bold tracking-tight text-text-primary md:text-7xl">
               <CountUp end={5} suffix="+" className="tabular-nums" />
             </span>
             <span className="mt-2 block text-lg text-text-secondary">
               {t("years")}
             </span>
-          </motion.div>
+          </div>
 
           {/* Role rotator */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-          >
+          <div>
             <RoleRotator roles={roles} />
-          </motion.div>
+          </div>
 
           {/* Location */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex items-center gap-2 text-text-secondary"
-          >
+          <div className="flex items-center gap-2 text-text-secondary">
             {/* Pulsing red dot */}
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
             </span>
             <span className="text-base">{t("location")}</span>
-          </motion.div>
+          </div>
 
           {/* Tech badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
-            className="flex flex-wrap gap-2"
-          >
-            {TECH_BADGES.map((tech, i) => (
-              <motion.span
+          <div className="flex flex-wrap gap-2">
+            {TECH_BADGES.map((tech) => (
+              <span
                 key={tech}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.6 + i * 0.08 }}
                 className={cn(
                   "rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-text-secondary",
                   "transition-colors duration-200 hover:border-accent-blue/30 hover:text-text-primary",
                 )}
               >
                 {tech}
-              </motion.span>
+              </span>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

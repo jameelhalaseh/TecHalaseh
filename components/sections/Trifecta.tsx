@@ -240,26 +240,6 @@ const ICON_MAP: Record<PillarCard["key"], (props: { accent: string }) => React.J
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Card animation variants                                                    */
-/* -------------------------------------------------------------------------- */
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 48 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-/* -------------------------------------------------------------------------- */
 /*  Trifecta Section                                                           */
 /* -------------------------------------------------------------------------- */
 
@@ -273,31 +253,18 @@ export default function Trifecta() {
     >
       <div className="mx-auto max-w-6xl">
         {/* Section title */}
-        <motion.h2
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center text-3xl font-bold tracking-tight text-text-primary md:text-4xl"
-        >
+        <h2 className="mb-16 text-center text-3xl font-bold tracking-tight text-text-primary md:text-4xl">
           {t("title")}
-        </motion.h2>
+        </h2>
 
         {/* Cards grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-3"
-        >
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {PILLARS.map((pillar) => {
             const Icon = ICON_MAP[pillar.key];
 
             return (
               <motion.div
                 key={pillar.key}
-                variants={cardVariants}
                 whileHover={{
                   scale: 1.02,
                   y: -4,
@@ -348,7 +315,7 @@ export default function Trifecta() {
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

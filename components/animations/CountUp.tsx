@@ -1,10 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface CountUpProps {
   end: number;
@@ -31,39 +27,47 @@ export default function CountUp({
     (value: number) => {
       return value.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    [decimals]
+    [decimals],
   );
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const trigger = ScrollTrigger.create({
-      trigger: el,
-      start: "top 85%",
-      once: true,
-      onEnter: () => {
-        if (hasAnimated.current) return;
-        hasAnimated.current = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true;
 
-        const counter = { value: 0 };
-        gsap.to(counter, {
-          value: end,
-          duration,
-          ease: "power2.out",
-          onUpdate: () => {
-            setDisplay(formatNumber(counter.value));
-          },
-          onComplete: () => {
-            setDisplay(formatNumber(end));
-          },
+            const startTime = performance.now();
+            const durationMs = duration * 1000;
+
+            function animate(currentTime: number) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / durationMs, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = eased * end;
+
+              setDisplay(formatNumber(current));
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                setDisplay(formatNumber(end));
+              }
+            }
+
+            requestAnimationFrame(animate);
+            observer.disconnect();
+          }
         });
       },
-    });
+      { threshold: 0.1 },
+    );
 
-    return () => {
-      trigger.kill();
-    };
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [end, duration, formatNumber]);
 
   return (

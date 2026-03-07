@@ -2,40 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { motion, type Variants } from "framer-motion";
-
-/* -------------------------------------------------------------------------- */
-/*  CV Download                                                                */
-/*  Section 8 – Stylised document visual with animated download button.       */
-/*  Points to /files/TecHalaseh_CV.pdf (user must place their PDF there).     */
-/* -------------------------------------------------------------------------- */
-
-/* ---- Framer Motion variants ---- */
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const letterContainer: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.03, delayChildren: 0.1 },
-  },
-};
-
-const letterChild: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+import { motion } from "framer-motion";
 
 /* ---- Decorative floating dots ---- */
 
@@ -161,43 +128,19 @@ export default function CVDownload() {
       {/* ---- Content ---- */}
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
         {/* Title with staggered letters */}
-        <motion.h2
-          className="text-4xl font-bold text-text-primary md:text-5xl"
-          variants={letterContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-        >
-          {t("title")
-            .split("")
-            .map((char, i) => (
-              <motion.span key={i} variants={letterChild} className="inline-block">
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-        </motion.h2>
+        <h2 className="text-4xl font-bold text-text-primary md:text-5xl">
+          {t("title")}
+        </h2>
 
         {/* Subtitle */}
-        <motion.p
-          className="mt-4 text-xl text-text-secondary"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-        >
+        <p className="mt-4 text-xl text-text-secondary">
           {t("subtitle")}
-        </motion.p>
+        </p>
 
         {/* Document visual */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="mt-8"
-        >
+        <div className="mt-8">
           <DocumentVisual />
-        </motion.div>
+        </div>
 
         {/* Download button */}
         <motion.button
@@ -235,15 +178,9 @@ export default function CVDownload() {
         </motion.button>
 
         {/* File info */}
-        <motion.p
-          className="mt-3 text-sm text-text-muted"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-        >
+        <p className="mt-3 text-sm text-text-muted">
           {t("fileInfo")}
-        </motion.p>
+        </p>
       </div>
     </section>
   );

@@ -122,39 +122,6 @@ const STEPS: StepData[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
-/*  Animation helpers                                                          */
-/* -------------------------------------------------------------------------- */
-
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number];
-
-const lineVariants = {
-  hidden: { scaleY: 0 },
-  visible: {
-    scaleY: 1,
-    transition: { duration: 0.6, ease },
-  },
-};
-
-const nodeVariants = {
-  hidden: { scale: 0, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 0.5, ease },
-  },
-};
-
-const contentVariants = {
-  hidden: { opacity: 0, x: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    transition: { duration: 0.5, ease },
-  },
-};
-
-/* -------------------------------------------------------------------------- */
 /*  Timeline Node                                                              */
 /* -------------------------------------------------------------------------- */
 
@@ -184,11 +151,7 @@ function TimelineNode({
         )}
       >
         {/* Content block (desktop: alternating side) */}
-        <motion.div
-          variants={contentVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
+        <div
           className={cn(
             "flex-1 pb-16",
             /* Desktop alignment */
@@ -205,29 +168,21 @@ function TimelineNode({
           <p className="text-sm leading-relaxed text-text-secondary max-w-sm inline-block">
             {t(`steps.${step.key}.desc`)}
           </p>
-        </motion.div>
+        </div>
 
         {/* Center: node + connecting line */}
         <div className="relative flex flex-col items-center order-1 md:order-none">
           {/* Node circle */}
-          <motion.div
-            variants={nodeVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
+          <div
             className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 bg-surface"
             style={{ borderColor: step.accentColor, color: step.accentColor }}
           >
             <Icon />
-          </motion.div>
+          </div>
 
           {/* Connecting line segment */}
           {!isLast && (
-            <motion.div
-              variants={lineVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-40px" }}
+            <div
               className="w-0.5 flex-1 min-h-[80px] origin-top"
               style={{
                 background: `linear-gradient(to bottom, ${step.accentColor}, ${STEPS[index + 1]?.accentColor ?? step.accentColor})`,
@@ -254,18 +209,12 @@ export default function Process() {
     <section id="process" className="relative px-6 py-32 md:px-12 lg:px-20">
       <div className="mx-auto max-w-3xl">
         {/* Section title */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
+        <div className="mb-16 text-center">
           <h2 className="text-5xl md:text-6xl font-bold text-text-primary">
             {t("title")}
           </h2>
           <div className="mt-3 mx-auto h-1 w-20 rounded-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan" />
-        </motion.div>
+        </div>
 
         {/* Timeline */}
         <div className="relative">
