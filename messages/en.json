@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "about": "About",
+    "work": "Work",
+    "skills": "Skills",
+    "cv": "CV",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "TecHalaseh.",
+    "tagline": "I build things that think.",
+    "subtitle": "Full Stack Developer · Security Engineer · AI Integrator",
+    "scroll": "Scroll to explore"
+  },
+  "identity": {
+    "years": "Years Building for the Web",
+    "roles": {
+      "fullstack": "Full Stack Developer",
+      "security": "Security Engineer",
+      "ai": "AI Integrator"
+    },
+    "location": "Based in Amman, Jordan"
+  },
+  "trifecta": {
+    "title": "Three Pillars of Expertise",
+    "fullstack": {
+      "title": "Full Stack Development",
+      "skills": "React/Next.js, Node.js/Express, Firebase, Azure, TypeScript"
+    },
+    "security": {
+      "title": "Cybersecurity & InfoSec",
+      "skills": "Information Security, Cloud Security, Microsoft Certifications, Security Architecture"
+    },
+    "ai": {
+      "title": "AI & ML Integration",
+      "skills": "LLM Integration, RAG Architectures, Vector Databases, Prompt Engineering"
+    }
+  },
+  "projects": {
+    "title": "Featured Work",
+    "gaibe": {
+      "title": "GAIBE",
+      "subtitle": "AI-Powered Bible Engagement",
+      "description": "An AI-powered chatbot serving Arabic-speaking users with intelligent Bible engagement, featuring a Scripture Memory Coach, theological safety layers, and RAG-powered contextual responses.",
+      "stat": "Serving Arabic-speaking users across the Middle East"
+    },
+    "rmnetwork": {
+      "title": "RM Network",
+      "subtitle": "Internal Tools Suite",
+      "description": "A suite of internal tools streamlining operations for a multi-department ministry organization, including asset management with QR codes, status dashboards, and Microsoft 365 automation.",
+      "stat": "Streamlining operations for a multi-department organization"
+    },
+    "ragcollector": {
+      "title": "RAG Data Collector",
+      "subtitle": "Chrome Extension + Dashboard",
+      "description": "A Chrome extension paired with a Node.js backend and React dashboard for collecting, structuring, and managing web data to build AI-ready knowledge bases.",
+      "stat": "From raw web data to AI-ready knowledge base"
+    },
+    "freelance": {
+      "title": "Freelance & Experimental",
+      "subtitle": "Side Projects & Explorations"
+    }
+  },
+  "techArsenal": {
+    "title": "Tech Arsenal",
+    "subtitle": "Interactive Skill Map",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "security": "Security",
+      "aiml": "AI / ML",
+      "devops": "DevOps"
+    }
+  },
+  "credentials": {
+    "title": "Credentials & Certifications",
+    "items": {
+      "degree": { "name": "Information Security Degree", "issuer": "University", "status": "Completed" },
+      "sc900": { "name": "SC-900", "issuer": "Microsoft", "status": "Certified" },
+      "ai900": { "name": "AI-900", "issuer": "Microsoft", "status": "In Progress" },
+      "sc200": { "name": "SC-200", "issuer": "Microsoft", "status": "In Progress" }
+    }
+  },
+  "process": {
+    "title": "How I Work",
+    "steps": {
+      "discover": { "title": "Discovery", "desc": "Understanding requirements, threat modeling, architecture planning" },
+      "design": { "title": "Design", "desc": "System design, API contracts, security-first architecture" },
+      "build": { "title": "Build", "desc": "Iterative development with CI/CD and AI-assisted coding" },
+      "secure": { "title": "Secure", "desc": "Security audit, penetration testing, compliance verification" },
+      "deploy": { "title": "Deploy & Iterate", "desc": "Cloud deployment, monitoring, continuous improvement" }
+    }
+  },
+  "cvDownload": {
+    "title": "Ready to learn more?",
+    "subtitle": "Download my full CV.",
+    "button": "Download CV",
+    "fileInfo": "PDF · Download CV"
+  },
+  "contact": {
+    "title": "Let's build something extraordinary.",
+    "subtitle": "Have a project in mind? Let's talk.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send Message"
+    },
+    "footer": "Built with Next.js, Three.js & creativity"
+  }
+}
