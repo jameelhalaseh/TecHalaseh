@@ -7,17 +7,15 @@ import { useScrollProgressRef } from "@/hooks/useScrollProgress";
 import { getActiveScene, getSceneProgress } from "@/lib/sceneConfig";
 
 /**
- * Placeholder avatar — a stylized humanoid figure.
- * Replace with useGLTF + useAnimations when the real scanned model is ready.
- * The model URL is controlled by AVATAR_MODEL_URL in lib/constants.ts.
+ * Procedural avatar with scene-specific poses and smooth visibility transitions.
  */
 export default function Avatar() {
   const groupRef = useRef<THREE.Group>(null);
   const headRef = useRef<THREE.Mesh>(null);
   const scrollRef = useScrollProgressRef();
   const { pointer } = useThree();
+  const opacityRef = useRef(1);
 
-  // Avatar materials
   const bodyMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
@@ -26,6 +24,7 @@ export default function Avatar() {
         roughness: 0.3,
         emissive: "#0A84FF",
         emissiveIntensity: 0.25,
+        transparent: true,
       }),
     [],
   );
@@ -38,6 +37,7 @@ export default function Avatar() {
         roughness: 0.3,
         emissive: "#0A84FF",
         emissiveIntensity: 0.3,
+        transparent: true,
       }),
     [],
   );
@@ -50,6 +50,7 @@ export default function Avatar() {
         emissiveIntensity: 1.0,
         metalness: 0.8,
         roughness: 0.2,
+        transparent: true,
       }),
     [],
   );
@@ -62,63 +63,70 @@ export default function Avatar() {
     const sceneP = getSceneProgress(progress, scene);
     const time = state.clock.elapsedTime;
 
-    // Idle breathing animation
-    groupRef.current.position.y = Math.sin(time * 1.5) * 0.02;
+    // Determine target opacity — fade out smoothly for mind and farewell
+    let targetOpacity = 1;
+    if (scene === "mind") {
+      // Fade out as we enter mind (first 15%), fade back in at exit (last 15%)
+      if (sceneP < 0.15) targetOpacity = 1 - sceneP / 0.15;
+      else if (sceneP > 0.85) targetOpacity = (sceneP - 0.85) / 0.15;
+      else targetOpacity = 0;
+    } else if (scene === "farewell") {
+      // Fully hidden during farewell — clean scenes for metrics, CV, contact
+      targetOpacity = 0;
+    }
+
+    opacityRef.current = THREE.MathUtils.lerp(opacityRef.current, targetOpacity, 0.08);
+    const op = opacityRef.current;
+
+    // Apply opacity to all materials
+    bodyMat.opacity = op;
+    headMat.opacity = op;
+    accentMat.opacity = op;
+    groupRef.current.visible = op > 0.01;
+
+    if (op <= 0.01) return;
+
+    // Idle breathing
+    const breathOffset = Math.sin(time * 1.5) * 0.02;
 
     // Head tracking — follow pointer
     const targetRotX = -pointer.y * 0.3;
     const targetRotY = pointer.x * 0.4;
-    headRef.current.rotation.x = THREE.MathUtils.lerp(
-      headRef.current.rotation.x,
-      targetRotX,
-      0.05,
-    );
-    headRef.current.rotation.y = THREE.MathUtils.lerp(
-      headRef.current.rotation.y,
-      targetRotY,
-      0.05,
-    );
+    headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, targetRotX, 0.05);
+    headRef.current.rotation.y = THREE.MathUtils.lerp(headRef.current.rotation.y, targetRotY, 0.05);
 
-    // Scene-specific visibility — hide in mind (first-person) and farewell (form focus)
-    const hidden = scene === "mind" || scene === "farewell";
-    groupRef.current.visible = !hidden;
-
-    // Scene-specific pose adjustments
+    // Scene-specific poses
     if (scene === "greeting") {
-      // Standing pose with subtle wave at start
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        0,
-        0.03,
-      );
+      groupRef.current.position.y = breathOffset;
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, 0, 0.03);
     } else if (scene === "projects") {
-      // Seated-ish pose, slight lean
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        0.2,
-        0.03,
-      );
+      // Seated at desk — lower Y, slight lean
+      groupRef.current.position.y = -0.35 + breathOffset;
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, 0.1, 0.03);
     } else if (scene === "showcase") {
-      // Presenting pose — slight rotation
+      // Standing on platform, rotating toward active service panel
+      groupRef.current.position.y = breathOffset;
+      const serviceIdx = Math.min(4, Math.floor(Math.max(0, sceneP - 0.08) / 0.16));
+      const angles = [-0.6, -0.3, 0, 0.3, 0.6];
+      const targetRot = sceneP < 0.08 ? 0 : angles[serviceIdx];
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
-        -0.15 + sceneP * 0.3,
-        0.03,
+        targetRot,
+        0.04,
       );
     } else if (scene === "trifecta") {
-      // Centered, powerful
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        0,
-        0.03,
-      );
+      groupRef.current.position.y = breathOffset;
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, 0, 0.03);
     } else if (scene === "farewell") {
-      // Relaxed, facing camera
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        0,
-        0.03,
-      );
+      // Off to the side for contact
+      groupRef.current.position.y = breathOffset;
+      groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, 2.5, 0.03);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, -0.5, 0.03);
+    }
+
+    // Reset x position when not in farewell
+    if (scene !== "farewell") {
+      groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, 0, 0.05);
     }
   });
 
@@ -137,14 +145,14 @@ export default function Avatar() {
       {/* Head */}
       <mesh ref={headRef} position={[0, 1.45, 0]} material={headMat} castShadow>
         <sphereGeometry args={[0.16, 16, 16]} />
-        {/* Eyes — accent glow */}
+        {/* Eyes */}
         <mesh position={[-0.05, 0.02, 0.14]} material={accentMat}>
           <sphereGeometry args={[0.02, 8, 8]} />
         </mesh>
         <mesh position={[0.05, 0.02, 0.14]} material={accentMat}>
           <sphereGeometry args={[0.02, 8, 8]} />
         </mesh>
-        {/* Visor / accent line across face */}
+        {/* Visor line */}
         <mesh position={[0, 0.02, 0.145]} material={accentMat}>
           <boxGeometry args={[0.2, 0.015, 0.01]} />
         </mesh>
@@ -174,12 +182,12 @@ export default function Avatar() {
         <capsuleGeometry args={[0.06, 0.4, 4, 8]} />
       </mesh>
 
-      {/* Accent ring at chest — "core" glow */}
+      {/* Core glow ring */}
       <mesh position={[0, 0.95, 0]} rotation={[Math.PI / 2, 0, 0]} material={accentMat}>
         <torusGeometry args={[0.15, 0.008, 8, 32]} />
       </mesh>
 
-      {/* Ground shadow/glow */}
+      {/* Ground shadow */}
       <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[0.35, 32]} />
         <meshBasicMaterial color="#0A84FF" transparent opacity={0.04} />

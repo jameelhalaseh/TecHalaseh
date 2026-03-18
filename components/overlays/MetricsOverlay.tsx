@@ -20,8 +20,6 @@ function useCountUp(target: number, isActive: boolean, duration = 2000): number 
       if (startTimeRef.current === null) startTimeRef.current = timestamp;
       const elapsed = timestamp - startTimeRef.current;
       const progress = Math.min(1, elapsed / duration);
-
-      // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(Math.floor(eased * target));
 
@@ -36,13 +34,18 @@ function useCountUp(target: number, isActive: boolean, duration = 2000): number 
   return value;
 }
 
+/**
+ * Metrics overlay — clean background, SOLE FOCUS, no 3D clutter.
+ * Shows at the start of the farewell scene.
+ */
 export default function MetricsOverlay() {
   const progress = useScrollProgress();
   const sceneP = getSceneProgress(progress, "farewell");
 
-  const metricsVisible = sceneP > 0 && sceneP < 0.3;
+  // Metrics visible: farewell 0-0.30
+  const metricsVisible = sceneP > 0 && sceneP < 0.30;
   const opacity = metricsVisible
-    ? Math.min(1, sceneP * 8) * Math.min(1, (0.3 - sceneP) * 8)
+    ? Math.min(1, sceneP * 10) * Math.min(1, (0.30 - sceneP) * 10)
     : 0;
 
   if (opacity <= 0) return null;
@@ -52,10 +55,29 @@ export default function MetricsOverlay() {
       className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center"
       style={{ opacity }}
     >
-      <div className="grid grid-cols-2 gap-8 max-w-lg">
-        {METRICS.map((metric, i) => (
-          <MetricCard key={i} metric={metric} index={i} isActive={metricsVisible} />
-        ))}
+      <div className="text-center max-w-2xl px-8">
+        {/* Section title */}
+        <h2
+          className="font-[family-name:var(--font-display)] font-bold text-text-primary mb-12"
+          style={{
+            fontSize: "clamp(32px, 4vw, 48px)",
+            letterSpacing: "-0.03em",
+            textShadow: "0 0 60px rgba(0,0,0,0.8)",
+          }}
+        >
+          Impact
+        </h2>
+
+        <div className="grid grid-cols-2 gap-10">
+          {METRICS.map((metric, i) => (
+            <MetricCard
+              key={i}
+              metric={metric}
+              index={i}
+              isActive={metricsVisible}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -73,28 +95,39 @@ function MetricCard({
   const value = useCountUp(metric.value, isActive);
 
   return (
-    <div
-      className="text-center"
-      style={{
-        animationDelay: `${index * 0.1}s`,
-      }}
-    >
+    <div className="text-center">
       <div
-        className="font-[family-name:var(--font-display)] font-bold text-text-primary"
+        className="font-[family-name:var(--font-display)] font-bold"
         style={{
-          fontSize: "clamp(40px, 6vw, 64px)",
+          fontSize: "clamp(56px, 8vw, 96px)",
           letterSpacing: "-0.03em",
           lineHeight: 1,
-          textShadow: "0 0 60px rgba(0,0,0,0.8)",
+          background: "linear-gradient(135deg, #0A84FF, #8B5CF6)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          filter: "drop-shadow(0 0 20px rgba(10,132,255,0.3))",
         }}
       >
         {metric.prefix}
         {value}
-        <span className="text-accent-blue">{metric.suffix}</span>
+        <span
+          style={{
+            fontSize: "clamp(24px, 3vw, 36px)",
+            WebkitTextFillColor: "#A0A0B0",
+          }}
+        >
+          {metric.suffix}
+        </span>
       </div>
       <p
-        className="mt-3 text-text-secondary font-[family-name:var(--font-body)]"
-        style={{ fontSize: "15px", letterSpacing: "0.02em", textShadow: "0 0 30px rgba(0,0,0,0.5)" }}
+        className="mt-3 font-[family-name:var(--font-body)]"
+        style={{
+          fontSize: "clamp(14px, 1.4vw, 18px)",
+          color: "#A0A0B0",
+          letterSpacing: "0.02em",
+          textShadow: "0 0 30px rgba(0,0,0,0.5)",
+        }}
       >
         {metric.label}
       </p>

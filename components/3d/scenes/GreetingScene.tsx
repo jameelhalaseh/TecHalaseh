@@ -43,7 +43,7 @@ export default function GreetingScene() {
     const progress = scrollRef.current;
     if (!groupRef.current) return;
 
-    const visible = isSceneVisible(progress, "greeting", 0.05);
+    const visible = isSceneVisible(progress, "greeting", 0.01);
     groupRef.current.visible = visible;
     if (!visible || !particlesRef.current) return;
 

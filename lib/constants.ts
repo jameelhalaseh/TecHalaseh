@@ -214,7 +214,7 @@ export const CREDENTIALS: Credential[] = [
 
 /* ─── Impact Metrics ─── */
 export const METRICS = [
-  { label: "Year Building for the Web", value: 1, prefix: "", suffix: "+" },
+  { label: "Years Building for the Web", value: 2, prefix: "", suffix: "+" },
   { label: "Projects Delivered", value: 10, prefix: "", suffix: "+" },
   { label: "Layer AI Pipeline Built", value: 13, prefix: "", suffix: "-Layer" },
   { label: "Member Org Secured", value: 15, prefix: "", suffix: "-Member" },

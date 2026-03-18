@@ -8,7 +8,6 @@ export default function HeroOverlay() {
   const progress = useScrollProgress();
   const [showScroll, setShowScroll] = useState(true);
 
-  // Hide scroll indicator after first scroll or 3s
   useEffect(() => {
     const timer = setTimeout(() => setShowScroll(false), 3000);
     return () => clearTimeout(timer);
@@ -18,7 +17,8 @@ export default function HeroOverlay() {
     if (progress > 0.02) setShowScroll(false);
   }, [progress]);
 
-  const opacity = progress < 0.12 ? 1 : Math.max(0, 1 - (progress - 0.12) / 0.03);
+  // Adjusted for greeting scene ending at 0.08
+  const opacity = progress < 0.06 ? 1 : Math.max(0, 1 - (progress - 0.06) / 0.02);
   if (opacity <= 0) return null;
 
   return (
@@ -103,7 +103,8 @@ export default function HeroOverlay() {
           }
         }
         @keyframes scrollDot {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
             opacity: 1;
           }

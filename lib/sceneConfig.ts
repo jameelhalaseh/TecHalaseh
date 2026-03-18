@@ -7,16 +7,16 @@ export interface SceneRange {
 }
 
 export const SCENE_RANGES: SceneRange[] = [
-  { id: "greeting", start: 0, end: 0.15 },
-  { id: "projects", start: 0.15, end: 0.40 },
-  { id: "mind", start: 0.40, end: 0.55 },
-  { id: "showcase", start: 0.55, end: 0.75 },
-  { id: "trifecta", start: 0.75, end: 0.88 },
-  { id: "farewell", start: 0.88, end: 1.0 },
+  { id: "greeting", start: 0, end: 0.08 },
+  { id: "projects", start: 0.08, end: 0.28 },
+  { id: "mind", start: 0.28, end: 0.44 },
+  { id: "showcase", start: 0.44, end: 0.66 },
+  { id: "trifecta", start: 0.66, end: 0.82 },
+  { id: "farewell", start: 0.82, end: 1.0 },
 ];
 
 /** Total scroll height in viewport units */
-export const SCROLL_HEIGHT_VH = 4000;
+export const SCROLL_HEIGHT_VH = 5500;
 
 /** Get which scene is active at a given scroll progress */
 export function getActiveScene(progress: number): string {

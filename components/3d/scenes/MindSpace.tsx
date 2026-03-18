@@ -73,7 +73,7 @@ export default function MindSpace() {
     const progress = scrollRef.current;
     if (!groupRef.current) return;
 
-    const visible = isSceneVisible(progress, "mind", 0.03);
+    const visible = isSceneVisible(progress, "mind", 0.01);
     groupRef.current.visible = visible;
     if (!visible || !nodesRef.current) return;
 
@@ -120,7 +120,7 @@ export default function MindSpace() {
         <group key={step.id} position={step.position.toArray()}>
           {/* Main node sphere */}
           <mesh>
-            <sphereGeometry args={[0.12, 16, 16]} />
+            <sphereGeometry args={[0.03, 12, 12]} />
             <meshBasicMaterial
               color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
               transparent
@@ -129,7 +129,7 @@ export default function MindSpace() {
           </mesh>
           {/* Glow ring */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.2, 0.006, 8, 32]} />
+            <torusGeometry args={[0.05, 0.002, 8, 32]} />
             <meshBasicMaterial
               color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
               transparent
@@ -142,9 +142,9 @@ export default function MindSpace() {
             return (
               <mesh
                 key={j}
-                position={[Math.cos(angle) * 0.4, Math.sin(angle) * 0.4, 0]}
+                position={[Math.cos(angle) * 0.1, Math.sin(angle) * 0.1, 0]}
               >
-                <sphereGeometry args={[0.04, 8, 8]} />
+                <sphereGeometry args={[0.01, 6, 6]} />
                 <meshBasicMaterial
                   color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
                   transparent
@@ -156,8 +156,8 @@ export default function MindSpace() {
           {/* Point light */}
           <pointLight
             color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
-            intensity={0.5}
-            distance={4}
+            intensity={0.15}
+            distance={2}
           />
         </group>
       ))}

@@ -5,102 +5,74 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useScrollProgressRef } from "@/hooks/useScrollProgress";
 import { isSceneVisible, getSceneProgress } from "@/lib/sceneConfig";
-import { SERVICES, TECH_SKILLS } from "@/lib/constants";
+import { SERVICES } from "@/lib/constants";
 
 /**
- * Scene 4: The Showcase — circular platform with holographic service cards and skill constellation.
- * Scroll: 55% → 75%
+ * Scene 4: Showcase — circular platform with holographic service panels.
+ * Avatar turns to each panel. Active panel glows, others dim.
  */
 export default function ShowcaseStage() {
   const groupRef = useRef<THREE.Group>(null);
   const scrollRef = useScrollProgressRef();
   const cardsGroupRef = useRef<THREE.Group>(null);
 
-  // Service card positions in a semicircle around avatar
   const cardPositions = useMemo(() => {
     return SERVICES.map((service, i) => {
       const angle = -Math.PI * 0.4 + (i / (SERVICES.length - 1)) * Math.PI * 0.8;
       return {
         ...service,
         x: Math.sin(angle) * 3,
-        y: 1.5 + (i % 2) * 0.3,
+        y: 1.5 + (i % 2) * 0.2,
         z: -Math.cos(angle) * 3,
         rotY: -angle,
+        angle,
       };
     });
-  }, []);
-
-  // Skill constellation data
-  const skillStars = useMemo(() => {
-    const stars: Array<{
-      name: string;
-      position: THREE.Vector3;
-      color: string;
-      level: number;
-    }> = [];
-    const categories = Object.values(TECH_SKILLS);
-    categories.forEach((cat, catIdx) => {
-      const catAngle = (catIdx / categories.length) * Math.PI * 2;
-      const catRadius = 2.5;
-      const cx = Math.cos(catAngle) * catRadius;
-      const cz = Math.sin(catAngle) * catRadius;
-
-      cat.items.forEach((item, itemIdx) => {
-        const itemAngle =
-          catAngle + ((itemIdx - cat.items.length / 2) / cat.items.length) * 0.8;
-        const r = catRadius + 0.5 + itemIdx * 0.3;
-        stars.push({
-          name: item.name,
-          position: new THREE.Vector3(
-            Math.cos(itemAngle) * r,
-            3.5 + (itemIdx % 3) * 0.4,
-            Math.sin(itemAngle) * r,
-          ),
-          color: cat.color,
-          level: item.level,
-        });
-      });
-    });
-    return stars;
   }, []);
 
   useFrame((state) => {
     const progress = scrollRef.current;
     if (!groupRef.current) return;
 
-    const visible = isSceneVisible(progress, "showcase", 0.03);
+    const visible = isSceneVisible(progress, "showcase", 0.01);
     groupRef.current.visible = visible;
     if (!visible) return;
 
     const time = state.clock.elapsedTime;
     const sceneP = getSceneProgress(progress, "showcase");
 
-    // Animate cards — gentle float
+    // Determine active service: 0.08-0.88 maps to 5 services
+    const serviceZone = Math.max(0, sceneP - 0.08) / 0.80; // 0→1 across service range
+    const activeService = Math.min(4, Math.floor(serviceZone * 5));
+    const allLit = sceneP > 0.88;
+
     if (cardsGroupRef.current) {
       cardsGroupRef.current.children.forEach((card, i) => {
-        card.position.y =
-          cardPositions[i].y + Math.sin(time * 0.6 + i * 1.2) * 0.08;
-        card.rotation.y =
-          cardPositions[i].rotY + Math.sin(time * 0.3 + i) * 0.03;
+        const isFocused = i === activeService || allLit;
+        const baseY = cardPositions[i].y;
+
+        // Float animation
+        card.position.y = baseY + Math.sin(time * 0.5 + i * 1.2) * 0.04;
+        card.rotation.y = cardPositions[i].rotY + Math.sin(time * 0.2 + i) * 0.02;
+
+        // Scale: focused panels are larger
+        const targetScale = isFocused ? 1.15 : 0.85;
+        card.scale.x = THREE.MathUtils.lerp(card.scale.x, targetScale, 0.06);
+        card.scale.y = THREE.MathUtils.lerp(card.scale.y, targetScale, 0.06);
+        card.scale.z = THREE.MathUtils.lerp(card.scale.z, targetScale, 0.06);
       });
     }
   });
 
   return (
     <group ref={groupRef} visible={false}>
-      {/* Circular platform */}
+      {/* Platform */}
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[4, 64]} />
-        <meshStandardMaterial
-          color="#0A0A12"
-          metalness={0.6}
-          roughness={0.3}
-          emissive="#0A84FF"
-          emissiveIntensity={0.02}
-        />
+        <meshStandardMaterial color="#0A0A12" metalness={0.6} roughness={0.3} emissive="#0A84FF" emissiveIntensity={0.02} />
       </mesh>
 
-      {/* Platform edge ring */}
+      {/* Platform rings */}
       <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[3.9, 4.0, 64]} />
         <meshBasicMaterial color="#0A84FF" transparent opacity={0.3} />
@@ -110,7 +82,7 @@ export default function ShowcaseStage() {
         <meshBasicMaterial color="#8B5CF6" transparent opacity={0.15} />
       </mesh>
 
-      {/* Service hologram cards */}
+      {/* Service hologram panels */}
       <group ref={cardsGroupRef}>
         {cardPositions.map((card, i) => (
           <group
@@ -118,114 +90,57 @@ export default function ShowcaseStage() {
             position={[card.x, card.y, card.z]}
             rotation={[0, card.rotY, 0]}
           >
-            {/* Card body */}
+            {/* Panel body — larger for readability */}
             <mesh>
-              <boxGeometry args={[0.9, 0.6, 0.02]} />
+              <boxGeometry args={[1.1, 0.75, 0.02]} />
               <meshStandardMaterial
                 color="#111119"
                 metalness={0.5}
                 roughness={0.3}
                 emissive={card.accent}
-                emissiveIntensity={0.1}
+                emissiveIntensity={0.12}
                 transparent
-                opacity={0.85}
+                opacity={0.9}
               />
             </mesh>
-            {/* Card border glow */}
+            {/* Panel border glow */}
             <mesh position={[0, 0, 0.011]}>
-              <planeGeometry args={[0.92, 0.62]} />
-              <meshBasicMaterial
-                color={card.accent}
-                transparent
-                opacity={0.05}
-              />
+              <planeGeometry args={[1.12, 0.77]} />
+              <meshBasicMaterial color={card.accent} transparent opacity={0.06} />
             </mesh>
-            {/* Icon area */}
-            <mesh position={[0, 0.12, 0.015]}>
-              <circleGeometry args={[0.08, 16]} />
-              <meshBasicMaterial
-                color={card.accent}
-                transparent
-                opacity={0.6}
-              />
+            {/* Service icon area */}
+            <mesh position={[0, 0.15, 0.015]}>
+              <circleGeometry args={[0.1, 16]} />
+              <meshBasicMaterial color={card.accent} transparent opacity={0.5} />
             </mesh>
-            {/* Card glow */}
-            <pointLight
-              position={[0, 0, 0.5]}
-              color={card.accent}
-              intensity={0.15}
-              distance={2}
-            />
+            {/* Title line placeholder */}
+            <mesh position={[0, -0.02, 0.015]}>
+              <planeGeometry args={[0.6, 0.03]} />
+              <meshBasicMaterial color={card.accent} transparent opacity={0.2} />
+            </mesh>
+            {/* Description lines */}
+            {[0, 1].map((j) => (
+              <mesh key={j} position={[0, -0.1 - j * 0.05, 0.015]}>
+                <planeGeometry args={[0.7 - j * 0.1, 0.015]} />
+                <meshBasicMaterial color="#A0A0B0" transparent opacity={0.1} />
+              </mesh>
+            ))}
+            {/* Panel glow */}
+            <pointLight position={[0, 0, 0.6]} color={card.accent} intensity={0.2} distance={2.5} />
           </group>
         ))}
       </group>
 
-      {/* Skill constellation (above avatar) */}
-      {skillStars.map((star, i) => (
-        <mesh key={i} position={star.position.toArray()}>
-          <sphereGeometry args={[0.03 + star.level * 0.008, 8, 8]} />
-          <meshBasicMaterial
-            color={star.color}
-            transparent
-            opacity={0.6 + star.level * 0.08}
-          />
-        </mesh>
-      ))}
-
-      {/* Connecting lines within skill categories */}
-      <SkillLines skillStars={skillStars} />
-
-      {/* Platform accent lines radiating outward */}
+      {/* Platform accent lines */}
       {Array.from({ length: 12 }).map((_, i) => {
         const angle = (i / 12) * Math.PI * 2;
         return (
-          <mesh
-            key={i}
-            position={[
-              Math.cos(angle) * 2,
-              0.01,
-              Math.sin(angle) * 2,
-            ]}
-            rotation={[-Math.PI / 2, 0, angle]}
-          >
+          <mesh key={i} position={[Math.cos(angle) * 2, 0.01, Math.sin(angle) * 2]} rotation={[-Math.PI / 2, 0, angle]}>
             <planeGeometry args={[0.003, 2]} />
             <meshBasicMaterial color="#0A84FF" transparent opacity={0.1} />
           </mesh>
         );
       })}
     </group>
-  );
-}
-
-/** Separate component to render skill constellation connecting lines */
-function SkillLines({
-  skillStars,
-}: {
-  skillStars: Array<{ name: string; position: THREE.Vector3; color: string; level: number }>;
-}) {
-  const lines = useMemo(() => {
-    const result: THREE.Line[] = [];
-    const categories = Object.values(TECH_SKILLS);
-    categories.forEach((cat) => {
-      const catStars = skillStars.filter((s) => s.color === cat.color);
-      if (catStars.length < 2) return;
-      const points = catStars.map((s) => s.position);
-      const geom = new THREE.BufferGeometry().setFromPoints(points);
-      const mat = new THREE.LineBasicMaterial({
-        color: cat.color,
-        transparent: true,
-        opacity: 0.15,
-      });
-      result.push(new THREE.Line(geom, mat));
-    });
-    return result;
-  }, [skillStars]);
-
-  return (
-    <>
-      {lines.map((line, i) => (
-        <primitive key={i} object={line} />
-      ))}
-    </>
   );
 }
