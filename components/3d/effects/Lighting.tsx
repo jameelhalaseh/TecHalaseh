@@ -91,7 +91,7 @@ export default function Lighting() {
   return (
     <>
       {/* Ambient fill */}
-      <ambientLight intensity={0.15} color="#1a1a2e" />
+      <ambientLight intensity={0.2} color="#1a1a2e" />
 
       {/* Key spotlight from above-behind */}
       <spotLight
@@ -132,8 +132,16 @@ export default function Lighting() {
       {/* Subtle rim light behind avatar */}
       <pointLight
         position={[0, 2, -2]}
-        intensity={0.4}
+        intensity={0.6}
         color="#0A84FF"
+        distance={8}
+      />
+
+      {/* Front fill light for avatar */}
+      <pointLight
+        position={[0, 1.5, 2.5]}
+        intensity={0.8}
+        color="#F0F0F5"
         distance={6}
       />
     </>

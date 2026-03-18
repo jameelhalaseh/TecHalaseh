@@ -32,7 +32,7 @@ export default function MindSpace() {
           Math.sin(angle) * radius + 1.5,
           z,
         ),
-        scale: 0.05 + Math.random() * 0.1,
+        scale: 0.02 + Math.random() * 0.04,
         phase: Math.random() * Math.PI * 2,
         color: new THREE.Color(
           ["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35"][Math.floor(Math.random() * 4)],
@@ -120,7 +120,7 @@ export default function MindSpace() {
         <group key={step.id} position={step.position.toArray()}>
           {/* Main node sphere */}
           <mesh>
-            <sphereGeometry args={[0.25, 16, 16]} />
+            <sphereGeometry args={[0.12, 16, 16]} />
             <meshBasicMaterial
               color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
               transparent
@@ -129,7 +129,7 @@ export default function MindSpace() {
           </mesh>
           {/* Glow ring */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.4, 0.01, 8, 32]} />
+            <torusGeometry args={[0.2, 0.006, 8, 32]} />
             <meshBasicMaterial
               color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
               transparent
@@ -142,9 +142,9 @@ export default function MindSpace() {
             return (
               <mesh
                 key={j}
-                position={[Math.cos(angle) * 0.8, Math.sin(angle) * 0.8, 0]}
+                position={[Math.cos(angle) * 0.4, Math.sin(angle) * 0.4, 0]}
               >
-                <sphereGeometry args={[0.08, 8, 8]} />
+                <sphereGeometry args={[0.04, 8, 8]} />
                 <meshBasicMaterial
                   color={["#0A84FF", "#00D4AA", "#8B5CF6", "#FF6B35", "#0A84FF"][i]}
                   transparent

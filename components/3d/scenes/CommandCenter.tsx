@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -17,6 +17,8 @@ export default function CommandCenter() {
   const groupRef = useRef<THREE.Group>(null);
   const scrollRef = useScrollProgressRef();
   const monitorsRef = useRef<THREE.Group>(null);
+  const [showHtml, setShowHtml] = useState(false);
+  const prevVisibleRef = useRef(false);
 
   const monitorPositions = useMemo(
     () => [
@@ -34,6 +36,10 @@ export default function CommandCenter() {
 
     const visible = isSceneVisible(progress, "projects", 0.05);
     groupRef.current.visible = visible;
+    if (prevVisibleRef.current !== visible) {
+      prevVisibleRef.current = visible;
+      setShowHtml(visible);
+    }
     if (!visible) return;
 
     const time = state.clock.elapsedTime;
@@ -134,7 +140,7 @@ export default function CommandCenter() {
             />
 
             {/* Project details rendered as HTML on the screen */}
-            {PROJECTS[i] && (
+            {showHtml && PROJECTS[i] && (
               <Html
                 position={[0, 0, 0.02]}
                 transform

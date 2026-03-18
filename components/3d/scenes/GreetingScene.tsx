@@ -88,7 +88,7 @@ export default function GreetingScene() {
         args={[40, 80, "#0A84FF", "#111119"]}
         position={[0, 0, 0]}
         material-transparent
-        material-opacity={0.15}
+        material-opacity={0.25}
       />
 
       {/* Floating particles */}
@@ -100,37 +100,9 @@ export default function GreetingScene() {
         <meshBasicMaterial transparent opacity={0.8} />
       </instancedMesh>
 
-      {/* Subtle aurora / nebula glow in background */}
-      <mesh position={[0, 5, -15]} rotation={[0, 0, 0]}>
-        <planeGeometry args={[30, 10]} />
-        <meshBasicMaterial
-          color="#0A84FF"
-          transparent
-          opacity={0.03}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      <mesh position={[5, 6, -18]}>
-        <planeGeometry args={[20, 8]} />
-        <meshBasicMaterial
-          color="#8B5CF6"
-          transparent
-          opacity={0.025}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-
-      {/* Volumetric spotlight cone (visual) */}
-      <mesh position={[0, 4, 0]}>
-        <coneGeometry args={[2.5, 7, 32, 1, true]} />
-        <meshBasicMaterial
-          color="#F0F0F5"
-          transparent
-          opacity={0.006}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-        />
-      </mesh>
+      {/* Ambient colored point lights for subtle nebula glow (no visible geometry) */}
+      <pointLight position={[0, 6, -15]} color="#0A84FF" intensity={0.15} distance={20} />
+      <pointLight position={[5, 7, -18]} color="#8B5CF6" intensity={0.1} distance={15} />
     </group>
   );
 }

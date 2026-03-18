@@ -21,11 +21,11 @@ export default function Avatar() {
   const bodyMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#1a1a2e",
-        metalness: 0.3,
-        roughness: 0.6,
+        color: "#4a4a7e",
+        metalness: 0.5,
+        roughness: 0.3,
         emissive: "#0A84FF",
-        emissiveIntensity: 0.05,
+        emissiveIntensity: 0.25,
       }),
     [],
   );
@@ -33,11 +33,11 @@ export default function Avatar() {
   const headMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#2a2a3e",
-        metalness: 0.2,
-        roughness: 0.5,
+        color: "#5a5a8e",
+        metalness: 0.4,
+        roughness: 0.3,
         emissive: "#0A84FF",
-        emissiveIntensity: 0.08,
+        emissiveIntensity: 0.3,
       }),
     [],
   );
@@ -47,7 +47,7 @@ export default function Avatar() {
       new THREE.MeshStandardMaterial({
         color: "#0A84FF",
         emissive: "#0A84FF",
-        emissiveIntensity: 0.6,
+        emissiveIntensity: 1.0,
         metalness: 0.8,
         roughness: 0.2,
       }),
@@ -79,9 +79,9 @@ export default function Avatar() {
       0.05,
     );
 
-    // Scene-specific visibility and position
-    const isInMindScene = scene === "mind";
-    groupRef.current.visible = !isInMindScene;
+    // Scene-specific visibility — hide in mind (first-person) and farewell (form focus)
+    const hidden = scene === "mind" || scene === "farewell";
+    groupRef.current.visible = !hidden;
 
     // Scene-specific pose adjustments
     if (scene === "greeting") {
@@ -181,8 +181,8 @@ export default function Avatar() {
 
       {/* Ground shadow/glow */}
       <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.4, 32]} />
-        <meshBasicMaterial color="#0A84FF" transparent opacity={0.08} />
+        <circleGeometry args={[0.35, 32]} />
+        <meshBasicMaterial color="#0A84FF" transparent opacity={0.04} />
       </mesh>
     </group>
   );

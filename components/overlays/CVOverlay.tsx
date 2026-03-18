@@ -9,9 +9,9 @@ export default function CVOverlay() {
   const sceneP = getSceneProgress(progress, "farewell");
   const [downloaded, setDownloaded] = useState(false);
 
-  const visible = sceneP > 0.2 && sceneP < 0.6;
+  const visible = sceneP > 0.15 && sceneP < 0.45;
   const opacity = visible
-    ? Math.min(1, (sceneP - 0.2) * 8) * Math.min(1, (0.6 - sceneP) * 8)
+    ? Math.min(1, (sceneP - 0.15) * 8) * Math.min(1, (0.45 - sceneP) * 8)
     : 0;
 
   if (opacity <= 0) return null;
