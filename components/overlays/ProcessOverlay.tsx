@@ -34,8 +34,9 @@ export default function ProcessOverlay() {
           <h2
             className="font-[family-name:var(--font-display)] font-bold"
             style={{
-              fontSize: "clamp(32px, 5vw, 56px)",
+              fontSize: "clamp(40px, 6vw, 72px)",
               letterSpacing: "-0.03em",
+              textShadow: "0 0 60px rgba(0,0,0,0.8)",
               background: "linear-gradient(90deg, #0A84FF, #8B5CF6)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -48,7 +49,10 @@ export default function ProcessOverlay() {
       )}
 
       {/* Process steps — appearing one by one */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-6">
+      <div
+        className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-6"
+        style={{ textShadow: "0 0 30px rgba(0,0,0,0.5)" }}
+      >
         {PROCESS_STEPS.map((step, i) => {
           const stepProgress = Math.max(
             0,

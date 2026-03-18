@@ -16,7 +16,7 @@ export const SCENE_RANGES: SceneRange[] = [
 ];
 
 /** Total scroll height in viewport units */
-export const SCROLL_HEIGHT_VH = 7000;
+export const SCROLL_HEIGHT_VH = 4000;
 
 /** Get which scene is active at a given scroll progress */
 export function getActiveScene(progress: number): string {

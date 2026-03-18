@@ -40,9 +40,9 @@ export default function MetricsOverlay() {
   const progress = useScrollProgress();
   const sceneP = getSceneProgress(progress, "farewell");
 
-  const metricsVisible = sceneP > 0 && sceneP < 0.4;
+  const metricsVisible = sceneP > 0 && sceneP < 0.3;
   const opacity = metricsVisible
-    ? Math.min(1, sceneP * 8) * Math.min(1, (0.4 - sceneP) * 8)
+    ? Math.min(1, sceneP * 8) * Math.min(1, (0.3 - sceneP) * 8)
     : 0;
 
   if (opacity <= 0) return null;
@@ -82,9 +82,10 @@ function MetricCard({
       <div
         className="font-[family-name:var(--font-display)] font-bold text-text-primary"
         style={{
-          fontSize: "clamp(36px, 5vw, 56px)",
+          fontSize: "clamp(40px, 6vw, 64px)",
           letterSpacing: "-0.03em",
           lineHeight: 1,
+          textShadow: "0 0 60px rgba(0,0,0,0.8)",
         }}
       >
         {metric.prefix}
@@ -92,8 +93,8 @@ function MetricCard({
         <span className="text-accent-blue">{metric.suffix}</span>
       </div>
       <p
-        className="mt-2 text-text-tertiary font-[family-name:var(--font-body)] text-sm"
-        style={{ letterSpacing: "0.02em" }}
+        className="mt-3 text-text-secondary font-[family-name:var(--font-body)]"
+        style={{ fontSize: "15px", letterSpacing: "0.02em", textShadow: "0 0 30px rgba(0,0,0,0.5)" }}
       >
         {metric.label}
       </p>

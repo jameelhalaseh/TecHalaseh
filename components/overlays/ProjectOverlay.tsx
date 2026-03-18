@@ -32,9 +32,10 @@ export default function ProjectOverlay() {
           <h2
             className="font-[family-name:var(--font-display)] font-bold text-text-primary text-center"
             style={{
-              fontSize: "clamp(40px, 6vw, 72px)",
+              fontSize: "clamp(48px, 6vw, 80px)",
               letterSpacing: "-0.03em",
               lineHeight: 1.1,
+              textShadow: "0 0 60px rgba(0,0,0,0.8)",
             }}
           >
             My Work

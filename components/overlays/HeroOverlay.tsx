@@ -37,6 +37,7 @@ export default function HeroOverlay() {
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
+          filter: "drop-shadow(0 0 60px rgba(0,0,0,0.5))",
         }}
       >
         {BRAND.name}
@@ -44,11 +45,12 @@ export default function HeroOverlay() {
 
       {/* Tagline */}
       <p
-        className="mt-6 text-text-secondary font-[family-name:var(--font-body)]"
+        className="mt-6 text-text-primary font-[family-name:var(--font-body)]"
         style={{
-          fontSize: "clamp(18px, 2.5vw, 28px)",
+          fontSize: "clamp(20px, 2.5vw, 32px)",
           letterSpacing: "0.01em",
           lineHeight: 1.4,
+          textShadow: "0 0 40px rgba(0,0,0,0.8)",
         }}
       >
         {BRAND.tagline}
@@ -56,11 +58,12 @@ export default function HeroOverlay() {
 
       {/* Subtitle */}
       <p
-        className="mt-4 text-text-tertiary font-[family-name:var(--font-body)]"
+        className="mt-4 text-text-secondary font-[family-name:var(--font-body)]"
         style={{
           fontSize: "clamp(14px, 1.5vw, 18px)",
           letterSpacing: "0.04em",
           fontWeight: 500,
+          textShadow: "0 0 30px rgba(0,0,0,0.6)",
         }}
       >
         {BRAND.subtitle}

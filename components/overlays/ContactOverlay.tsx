@@ -29,7 +29,16 @@ export default function ContactOverlay() {
       className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center"
       style={{ opacity }}
     >
-      <div className="max-w-lg w-full px-8 pointer-events-auto">
+      <div
+        className="max-w-lg w-full px-8 pointer-events-auto mx-auto"
+        style={{
+          background: "rgba(6, 6, 11, 0.7)",
+          backdropFilter: "blur(16px)",
+          borderRadius: "24px",
+          border: "1px solid rgba(255, 255, 255, 0.06)",
+          padding: "40px 32px",
+        }}
+      >
         {/* Headline */}
         <h2
           className="font-[family-name:var(--font-display)] font-bold text-center"
