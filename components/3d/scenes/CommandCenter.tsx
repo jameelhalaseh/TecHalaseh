@@ -2,13 +2,15 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useScrollProgressRef } from "@/hooks/useScrollProgress";
 import { isSceneVisible, getSceneProgress } from "@/lib/sceneConfig";
-import { PROJECTS } from "@/lib/constants";
+import { PROJECTS, type Project } from "@/lib/constants";
 
 /**
  * Scene 2: The Command Center — desk with floating holographic monitors.
+ * Project details render directly ON each monitor screen using drei Html.
  * Scroll: 15% → 40%
  */
 export default function CommandCenter() {
@@ -34,19 +36,15 @@ export default function CommandCenter() {
     groupRef.current.visible = visible;
     if (!visible) return;
 
-    const sceneP = getSceneProgress(progress, "projects");
     const time = state.clock.elapsedTime;
-
-    // Fade in the desk environment
-    const fadeIn = Math.min(1, sceneP * 4);
-    const fadeOut = sceneP > 0.9 ? 1 - (sceneP - 0.9) / 0.1 : 1;
-    const opacity = fadeIn * fadeOut;
 
     // Animate monitors — gentle float
     if (monitorsRef.current) {
       monitorsRef.current.children.forEach((child, i) => {
-        child.position.y =
-          monitorPositions[i].pos[1] + Math.sin(time * 0.8 + i * 1.5) * 0.05;
+        if (monitorPositions[i]) {
+          child.position.y =
+            monitorPositions[i].pos[1] + Math.sin(time * 0.8 + i * 1.5) * 0.05;
+        }
       });
     }
   });
@@ -89,13 +87,13 @@ export default function CommandCenter() {
         <meshStandardMaterial color="#111119" metalness={0.4} roughness={0.5} />
       </mesh>
 
-      {/* Holographic monitors */}
+      {/* Holographic monitors with project content ON screen */}
       <group ref={monitorsRef}>
         {monitorPositions.map((mon, i) => (
           <group key={i} position={mon.pos} rotation={[0, mon.rot, 0]}>
             {/* Screen frame */}
             <mesh>
-              <boxGeometry args={[1.1, 0.7, 0.02]} />
+              <boxGeometry args={[1.2, 0.8, 0.02]} />
               <meshStandardMaterial
                 color="#0A0A12"
                 metalness={0.8}
@@ -104,42 +102,49 @@ export default function CommandCenter() {
                 emissiveIntensity={0.05}
               />
             </mesh>
-            {/* Screen surface — emissive glow */}
+
+            {/* Screen surface — dark background glow */}
             <mesh position={[0, 0, 0.012]}>
-              <planeGeometry args={[1.0, 0.6]} />
+              <planeGeometry args={[1.1, 0.7]} />
               <meshBasicMaterial
                 color={mon.color}
                 transparent
-                opacity={0.15}
+                opacity={0.08}
               />
             </mesh>
-            {/* Screen scan line effect */}
-            {Array.from({ length: 8 }).map((_, j) => (
-              <mesh key={j} position={[0, -0.25 + j * 0.07, 0.015]}>
-                <planeGeometry args={[0.95, 0.003]} />
+
+            {/* Scan lines for holographic feel */}
+            {Array.from({ length: 10 }).map((_, j) => (
+              <mesh key={j} position={[0, -0.3 + j * 0.065, 0.014]}>
+                <planeGeometry args={[1.08, 0.002]} />
                 <meshBasicMaterial
                   color={mon.color}
                   transparent
-                  opacity={0.1}
+                  opacity={0.06}
                 />
               </mesh>
             ))}
+
             {/* Screen glow halo */}
             <pointLight
-              position={[0, 0, 0.3]}
+              position={[0, 0, 0.4]}
               color={mon.color}
               intensity={0.3}
               distance={2}
             />
-            {/* Project label (3D text placeholder) */}
-            <mesh position={[0, -0.42, 0.02]}>
-              <planeGeometry args={[0.8, 0.06]} />
-              <meshBasicMaterial
-                color={mon.color}
-                transparent
-                opacity={0.3}
-              />
-            </mesh>
+
+            {/* Project details rendered as HTML on the screen */}
+            {PROJECTS[i] && (
+              <Html
+                position={[0, 0, 0.02]}
+                transform
+                occlude={false}
+                distanceFactor={1.2}
+                style={{ pointerEvents: "none" }}
+              >
+                <MonitorContent project={PROJECTS[i]} color={mon.color} />
+              </Html>
+            )}
           </group>
         ))}
       </group>
@@ -177,5 +182,105 @@ export default function CommandCenter() {
         </mesh>
       ))}
     </group>
+  );
+}
+
+/**
+ * HTML content rendered directly on a 3D monitor screen.
+ */
+function MonitorContent({ project, color }: { project: Project; color: string }) {
+  return (
+    <div
+      style={{
+        width: 280,
+        padding: "16px 20px",
+        fontFamily: "var(--font-body), 'Plus Jakarta Sans', system-ui, sans-serif",
+        color: "#F0F0F5",
+        background: "rgba(6, 6, 11, 0.85)",
+        borderRadius: 12,
+        border: `1px solid ${color}30`,
+        backdropFilter: "blur(8px)",
+        userSelect: "none",
+      }}
+    >
+      {/* Title */}
+      <div
+        style={{
+          fontFamily: "var(--font-display), 'Space Grotesk', system-ui, sans-serif",
+          fontSize: 14,
+          fontWeight: 700,
+          letterSpacing: "-0.02em",
+          lineHeight: 1.3,
+          color: "#F0F0F5",
+          marginBottom: 8,
+        }}
+      >
+        {project.title}
+      </div>
+
+      {/* Description */}
+      <div
+        style={{
+          fontSize: 10,
+          lineHeight: 1.5,
+          color: "#A0A0B0",
+          letterSpacing: "0.01em",
+          marginBottom: 10,
+        }}
+      >
+        {project.description}
+      </div>
+
+      {/* Tech tags */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            style={{
+              fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+              fontSize: 8,
+              padding: "2px 8px",
+              borderRadius: 6,
+              background: `${color}18`,
+              border: `1px solid ${color}35`,
+              color: color,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      {/* Stat line */}
+      <div
+        style={{
+          marginTop: 8,
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <div
+          style={{
+            width: 5,
+            height: 5,
+            borderRadius: "50%",
+            background: color,
+            boxShadow: `0 0 6px ${color}80`,
+          }}
+        />
+        <span
+          style={{
+            fontSize: 9,
+            color: "#6B6B80",
+            fontWeight: 500,
+            letterSpacing: "0.02em",
+          }}
+        >
+          {project.stat}
+        </span>
+      </div>
+    </div>
   );
 }
