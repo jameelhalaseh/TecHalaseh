@@ -1,28 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0A0A0F;
-  --color-surface: #1A1A2E;
-  --color-surface-light: #2A2A3E;
+  /* Backgrounds — 3-tier depth system */
+  --color-bg-void: #06060B;
+  --color-bg-primary: #0A0A12;
+  --color-bg-elevated: #111119;
+  --color-bg-surface: #1A1A2E;
+
+  /* Accent Colors */
   --color-accent-blue: #0A84FF;
+  --color-accent-blue-hover: #3399FF;
   --color-accent-cyan: #00D4AA;
   --color-accent-purple: #8B5CF6;
-  --color-text-primary: #F5F5F7;
-  --color-text-secondary: #86868B;
-  --color-text-muted: #48484A;
+  --color-accent-warm: #FF6B35;
 
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  /* Text hierarchy */
+  --color-text-primary: #F0F0F5;
+  --color-text-secondary: #A0A0B0;
+  --color-text-tertiary: #6B6B80;
+  --color-text-disabled: #3D3D50;
+
+  /* Borders */
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.12);
+  --color-border-active: rgba(10, 132, 255, 0.4);
+
+  /* Fonts */
+  --font-display: var(--font-display), "Space Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-body), "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", monospace;
 }
 
 html {
-  scroll-behavior: smooth;
-  background-color: #0A0A0F;
-  color: #F5F5F7;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  background-color: #06060B;
+  color: #F0F0F5;
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -30,47 +46,55 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #06060B;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #0A84FF, #8B5CF6);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0A84FF, #00D4AA);
+  background: linear-gradient(180deg, #3399FF, #8B5CF6);
 }
 
 /* Selection */
 ::selection {
   background: rgba(10, 132, 255, 0.3);
-  color: #F5F5F7;
+  color: #F0F0F5;
 }
 
 /* Glass morphism utility */
 .glass {
-  background: rgba(26, 26, 46, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 245, 247, 0.08);
+  background: rgba(17, 17, 25, 0.75);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
 }
 
-/* Grid background pattern */
-.grid-pattern {
-  background-image:
-    linear-gradient(rgba(245, 245, 247, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245, 245, 247, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+.glass:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(17, 17, 25, 0.85);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Reduced-motion / animation fallback                                */
-/*  When the user prefers reduced motion, or when Framer Motion's      */
-/*  whileInView never fires (e.g. full-page screenshot, SSR), ensure   */
-/*  all content is visible instead of stuck at opacity: 0.             */
-/* ------------------------------------------------------------------ */
+/* Easing custom properties */
+:root {
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-hover: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-scroll: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Focus states */
+*:focus-visible {
+  outline: 2px solid #0A84FF;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -78,7 +102,6 @@ body {
     transition-duration: 0.01ms !important;
   }
 
-  /* Force Framer Motion hidden elements to be visible */
   [style*="opacity: 0"],
   [style*="opacity:0"] {
     opacity: 1 !important;

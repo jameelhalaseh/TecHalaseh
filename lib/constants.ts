@@ -1,59 +1,160 @@
+/* ─── Avatar ─── */
+export const AVATAR_MODEL_URL = "/models/avatar.glb";
+export const AVATAR_ANIMATIONS_PATH = "/models/animations/";
+
+/* ─── Colors (mirrors CSS theme) ─── */
 export const COLORS = {
-  background: "#0A0A0F",
-  surface: "#1A1A2E",
-  surfaceLight: "#2A2A3E",
+  bgVoid: "#06060B",
+  bgPrimary: "#0A0A12",
+  bgElevated: "#111119",
+  bgSurface: "#1A1A2E",
   accentBlue: "#0A84FF",
+  accentBlueHover: "#3399FF",
   accentCyan: "#00D4AA",
   accentPurple: "#8B5CF6",
-  textPrimary: "#F5F5F7",
-  textSecondary: "#86868B",
-  textMuted: "#48484A",
+  accentWarm: "#FF6B35",
+  textPrimary: "#F0F0F5",
+  textSecondary: "#A0A0B0",
+  textTertiary: "#6B6B80",
+  textDisabled: "#3D3D50",
 } as const;
 
-export const PROJECTS = [
+/* ─── Brand ─── */
+export const BRAND = {
+  name: "TecHalaseh",
+  owner: "Jameel Halaseh",
+  tagline: "I build things that think.",
+  subtitle: "Full Stack Developer · Security Engineer · AI Integrator",
+  location: "Amman, Jordan",
+  email: "jameel@techalaseh.com",
+  github: "https://github.com/jameelhalaseh",
+  linkedin: "https://linkedin.com/in/jameelhalaseh",
+  domain: "techalaseh.com",
+} as const;
+
+/* ─── Projects ─── */
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tech: string[];
+  stat: string;
+  accent: string;
+}
+
+export const PROJECTS: Project[] = [
   {
     id: "gaibe",
-    accent: "#8B5CF6",
-    accentGradient: "from-purple-500 to-violet-600",
-    tech: ["React", "Firebase", "Azure Functions", "Claude API", "RAG", "Weaviate", "Arabic NLP"],
-    mockupType: "phone" as const,
+    title: "GAIBE — AI-Powered Bible Engagement Platform",
+    description:
+      "An AI chatbot with a 13-layer processing pipeline serving Arabic-speaking users. Features a Scripture Memory Coach, theological safety verification, sentiment analysis, and RAG-powered contextual responses.",
+    tech: ["React", "Node.js", "PostgreSQL", "OpenAI GPT", "RAG", "Heroku"],
+    stat: "13-layer AI pipeline",
+    accent: COLORS.accentPurple,
   },
   {
     id: "rmnetwork",
-    accent: "#0A84FF",
-    accentGradient: "from-blue-500 to-blue-600",
-    tech: ["Next.js", "TypeScript", "Microsoft 365", "QR Systems", "Azure AD"],
-    mockupType: "desktop" as const,
+    title: "RM Network Internal Tools",
+    description:
+      "A suite of internal tools for a multi-department organization — asset management with QR codes, admin dashboards, Microsoft 365 automation, and Azure AD integration.",
+    tech: ["Next.js", "TypeScript", "Microsoft 365 API", "Azure AD", "QR Systems"],
+    stat: "15-member organization streamlined",
+    accent: COLORS.accentBlue,
   },
   {
     id: "ragcollector",
-    accent: "#00D4AA",
-    accentGradient: "from-cyan-400 to-emerald-500",
-    tech: ["Chrome Extension API", "Node.js", "SQLite", "React"],
-    mockupType: "browser" as const,
+    title: "RAG Data Collector",
+    description:
+      "A Chrome extension paired with a Node.js backend and React dashboard for collecting, structuring, and managing web data to build AI-ready knowledge bases. Includes a full website crawler.",
+    tech: ["Chrome Extension API", "Node.js", "SQLite", "React", "Web Scraping"],
+    stat: "Raw data to AI-ready knowledge base",
+    accent: COLORS.accentCyan,
   },
   {
-    id: "freelance",
-    accent: "#F59E0B",
-    accentGradient: "from-amber-400 via-pink-500 to-purple-500",
-    tech: [],
-    mockupType: "cards" as const,
+    id: "aimediapipeline",
+    title: "AI Media Workflow Pipeline",
+    description:
+      "Designed and implemented an AI-powered content production pipeline for Arabic-language media — AI-generated video, voice synthesis, and automated workflows.",
+    tech: ["HeyGen", "ElevenLabs", "n8n (self-hosted)", "Python"],
+    stat: "End-to-end AI content pipeline",
+    accent: COLORS.accentWarm,
   },
-] as const;
+];
 
-export const TECH_SKILLS = {
+/* ─── Services ─── */
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  accent: string;
+}
+
+export const SERVICES: Service[] = [
+  {
+    id: "fullstack",
+    title: "Full-Stack Web Development",
+    description: "Custom websites and web applications with React, Next.js, Node.js, TypeScript",
+    icon: "code",
+    accent: COLORS.accentBlue,
+  },
+  {
+    id: "ai",
+    title: "AI Integration & Smart Products",
+    description: "AI chatbots, RAG systems, LLM integration, AI content pipelines",
+    icon: "brain",
+    accent: COLORS.accentPurple,
+  },
+  {
+    id: "security",
+    title: "Cybersecurity Consulting",
+    description: "Security audits, cloud security, policy development, vulnerability assessment",
+    icon: "shield",
+    accent: COLORS.accentCyan,
+  },
+  {
+    id: "cloud",
+    title: "Cloud & IT Infrastructure",
+    description: "Azure setup, M365 admin, CI/CD, deployment automation",
+    icon: "cloud",
+    accent: COLORS.accentBlue,
+  },
+  {
+    id: "consulting",
+    title: "Technical Consulting",
+    description: "Tech strategy, workflow automation, IT department structuring",
+    icon: "lightbulb",
+    accent: COLORS.accentWarm,
+  },
+];
+
+/* ─── Tech Skills ─── */
+export interface TechSkill {
+  name: string;
+  level: number;
+}
+
+export interface SkillCategory {
+  label: string;
+  color: string;
+  items: TechSkill[];
+}
+
+export const TECH_SKILLS: Record<string, SkillCategory> = {
   frontend: {
-    color: "#0A84FF",
+    label: "Frontend",
+    color: COLORS.accentBlue,
     items: [
       { name: "React", level: 5 },
       { name: "Next.js", level: 5 },
       { name: "TypeScript", level: 5 },
-      { name: "Tailwind CSS", level: 4 },
+      { name: "Tailwind", level: 4 },
       { name: "Three.js", level: 3 },
       { name: "Framer Motion", level: 4 },
     ],
   },
   backend: {
+    label: "Backend",
     color: "#34D399",
     items: [
       { name: "Node.js", level: 5 },
@@ -64,16 +165,18 @@ export const TECH_SKILLS = {
     ],
   },
   security: {
-    color: "#00D4AA",
+    label: "Security",
+    color: COLORS.accentCyan,
     items: [
       { name: "Azure AD/IAM", level: 4 },
-      { name: "Penetration Testing", level: 3 },
+      { name: "Pen Testing", level: 3 },
       { name: "SIEM", level: 3 },
       { name: "Security Architecture", level: 4 },
     ],
   },
   aiml: {
-    color: "#8B5CF6",
+    label: "AI/ML",
+    color: COLORS.accentPurple,
     items: [
       { name: "LLM APIs", level: 5 },
       { name: "RAG", level: 4 },
@@ -82,7 +185,8 @@ export const TECH_SKILLS = {
     ],
   },
   devops: {
-    color: "#F59E0B",
+    label: "DevOps",
+    color: COLORS.accentWarm,
     items: [
       { name: "Git/GitHub", level: 5 },
       { name: "Docker", level: 3 },
@@ -90,19 +194,75 @@ export const TECH_SKILLS = {
       { name: "Vercel", level: 5 },
     ],
   },
-} as const;
+};
 
-export const CREDENTIALS = [
-  { id: "degree", abbr: "BSc", color: "#0A84FF" },
-  { id: "ceh", abbr: "CEH", color: "#00D4AA" },
-  { id: "ai900", abbr: "AI", color: "#8B5CF6" },
-  { id: "sc200", abbr: "SC", color: "#F59E0B" },
+/* ─── Credentials ─── */
+export interface Credential {
+  id: string;
+  title: string;
+  abbr: string;
+  status: "completed" | "in-progress";
+  color: string;
+}
+
+export const CREDENTIALS: Credential[] = [
+  { id: "degree", title: "Information Security Degree", abbr: "BSc", status: "completed", color: COLORS.accentBlue },
+  { id: "ceh", title: "Ethical Hacking (40 Hours)", abbr: "CEH", status: "completed", color: COLORS.accentCyan },
+  { id: "ai900", title: "AWS AI Practitioner", abbr: "AWS", status: "in-progress", color: COLORS.accentPurple },
+  { id: "sc200", title: "SC-200 Security Operations", abbr: "SC", status: "in-progress", color: COLORS.accentWarm },
+];
+
+/* ─── Impact Metrics ─── */
+export const METRICS = [
+  { label: "Year Building for the Web", value: 1, prefix: "", suffix: "+" },
+  { label: "Projects Delivered", value: 10, prefix: "", suffix: "+" },
+  { label: "Layer AI Pipeline Built", value: 13, prefix: "", suffix: "-Layer" },
+  { label: "Member Org Secured", value: 15, prefix: "", suffix: "-Member" },
 ] as const;
 
-export const NAV_SECTIONS = [
-  { id: "about", icon: "user" },
-  { id: "work", icon: "briefcase" },
-  { id: "skills", icon: "zap" },
-  { id: "cv", icon: "file" },
-  { id: "contact", icon: "mail" },
+/* ─── Trifecta Pillars ─── */
+export const TRIFECTA = [
+  {
+    id: "security",
+    title: "Cybersecurity",
+    tagline: "I don't just build things — I make sure they can't be broken.",
+    color: COLORS.accentCyan,
+    skills: ["Azure AD/IAM", "Penetration Testing", "Security Architecture", "SIEM", "Compliance"],
+  },
+  {
+    id: "development",
+    title: "Full-Stack Development",
+    tagline: "From concept to deployment — I build the whole stack.",
+    color: COLORS.accentBlue,
+    skills: ["React/Next.js", "Node.js/Express", "TypeScript", "Firebase", "Vercel"],
+  },
+  {
+    id: "ai",
+    title: "AI Integration",
+    tagline: "I make products think, learn, and respond intelligently.",
+    color: COLORS.accentPurple,
+    skills: ["LLM APIs", "RAG Systems", "Prompt Engineering", "Vector DBs", "AI Pipelines"],
+  },
+] as const;
+
+export const TRIFECTA_CLOSING =
+  "Most developers can't do security. Most security people can't build apps. Almost nobody integrates AI into both. I do all three.";
+
+/* ─── Process Steps (Mind Scene) ─── */
+export const PROCESS_STEPS = [
+  { id: "discovery", label: "Discovery", nodes: ["Requirements", "Threat Modeling", "Architecture"] },
+  { id: "design", label: "Design", nodes: ["System Design", "API Contracts", "Security-First"] },
+  { id: "build", label: "Build", nodes: ["Iterative Development", "CI/CD", "AI-Assisted Coding"] },
+  { id: "secure", label: "Secure", nodes: ["Security Audit", "Pen Testing", "Compliance"] },
+  { id: "deploy", label: "Deploy", nodes: ["Cloud Deployment", "Monitoring", "Continuous Improvement"] },
+] as const;
+
+/* ─── Navigation Scenes ─── */
+export const SCENES = [
+  { id: "greeting", label: "Hello" },
+  { id: "projects", label: "Work" },
+  { id: "mind", label: "Process" },
+  { id: "showcase", label: "Skills" },
+  { id: "trifecta", label: "Identity" },
+  { id: "farewell", label: "Contact" },
 ] as const;

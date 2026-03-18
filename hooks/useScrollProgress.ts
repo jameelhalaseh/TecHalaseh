@@ -1,84 +1,57 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
-interface Section {
-  id: string;
-  label?: string;
-  top: number;
-  bottom: number;
-}
+/**
+ * Returns a 0→1 value representing how far the user has scrolled
+ * through the entire document.
+ */
+export function useScrollProgress(): number {
+  const [progress, setProgress] = useState(0);
 
-interface ScrollProgressState {
-  progress: number;
-  activeSection: string | null;
-  sections: Section[];
-}
-
-export function useScrollProgress(sectionSelector = "section[id]") {
-  const [state, setState] = useState<ScrollProgressState>({
-    progress: 0,
-    activeSection: null,
-    sections: [],
-  });
-
-  const buildSectionMap = useCallback(() => {
-    const elements = document.querySelectorAll(sectionSelector);
-    const mapped: Section[] = [];
-
-    elements.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      const scrollY = window.scrollY;
-      mapped.push({
-        id: el.id,
-        label: el.getAttribute("data-label") ?? el.id,
-        top: rect.top + scrollY,
-        bottom: rect.bottom + scrollY,
-      });
-    });
-
-    return mapped;
-  }, [sectionSelector]);
+  const handleScroll = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0) {
+      setProgress(Math.min(1, Math.max(0, scrollTop / docHeight)));
+    }
+  }, []);
 
   useEffect(() => {
-    let ticking = false;
-
-    const update = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
-
-      const sections = buildSectionMap();
-      const viewportMiddle = scrollY + window.innerHeight / 2;
-
-      let activeSection: string | null = null;
-      for (const section of sections) {
-        if (viewportMiddle >= section.top && viewportMiddle <= section.bottom) {
-          activeSection = section.id;
-          break;
-        }
-      }
-
-      setState({ progress, activeSection, sections });
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
-
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-  }, [buildSectionMap]);
+  }, [handleScroll]);
 
-  return state;
+  return progress;
+}
+
+/**
+ * Mutable ref version for use inside R3F useFrame — avoids re-renders.
+ */
+export function useScrollProgressRef() {
+  const ref = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        ref.current = Math.min(1, Math.max(0, scrollTop / docHeight));
+      }
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
+  return ref;
 }
